@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-
+import axios from "axios";
 import PortfolioItem from "./portfolio-item";
 
 export default class PortfolioContainer extends Component {
@@ -9,11 +9,7 @@ export default class PortfolioContainer extends Component {
         this.state = {
             pageTitle: "Welcome to my portfolio",
             isLoading: false,
-            data : [
-                { title: "Grupo Edeline", category: "Ocio", slug: "grupo-edeline" }, 
-                { title: "Sedan", category: "Publicidad", slug: "sedan" }, 
-                { title: "Magma", category: "Cultura", slug: "magma" }
-            ]
+            data : []
         };
 
         this.handleTitle = this.handleTitle.bind(this);
@@ -28,25 +24,44 @@ export default class PortfolioContainer extends Component {
         });
     }
 
+    getPortfolioItems(){
+        axios
+          .get('https://anahuerta.devcamp.space/portfolio/portfolio_items')
+          .then (response =>  {
+            //console.log("response data",response);
+            this.setState({
+              data: response.data.portfolio_items
+            })
+          })
+          .catch (error=> {
+           console.log(error);
+          })
+      }
+
     portfolioItems(){
         
         return this.state.data.map(item =>{
-            return <PortfolioItem title={item.title} url = {"google.com"} slug= {item.slug}/>;
+            console.log("item data", item);
+            return (<PortfolioItem key= {item.id} title={item.name} url = {item.url} slug= {item.id}/>);
         });
     }
 
-    
+    componentDidMount(){
+        this.getPortfolioItems();
+    }
+
     render(){
         if(this.state.isLoading){
             return <div>Loading...</div>
         }
+
         return(
             <div>
                 <h2>{this.state.pageTitle}</h2>
                 <hr />
-                <button onClick= {()=> this.handleTitle("Ocio")}>Ocio</button>
-                <button onClick= {()=> this.handleTitle("Publicidad")}>Publicidad</button>
-                <button onClick= {()=> this.handleTitle("Cultura")}>Cultura</button>
+                <button onClick= {()=> this.handleTitle("Software")}>Software</button>
+                <button onClick= {()=> this.handleTitle("Hardware")}>Hardware</button>
+                <button onClick= {()=> this.handleTitle("E-Commerce")}>E-Commerce</button>
                 {this.portfolioItems()}
             </div>
         );
