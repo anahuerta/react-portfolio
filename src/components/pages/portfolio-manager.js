@@ -2,37 +2,80 @@ import React, { Component } from "react";
 import axios from "axios";
 
 import PortfolioSidebarList from "../portfolio/portfolio-sidebar-list";
-import PortfolioForm from "../portfolio/portfolio-form"
-
-// Nj!GSqh6FvPpsB!
+import PortfolioForm from "../portfolio/portfolio-form";
 
 export default class PortfolioManager extends Component {
-  constructor(){
+  constructor() {
     super();
 
-    this.state={
-      portfolioItems:[]
+    this.state = {
+      portfolioItems: [],
+      portfolioToEdit:{}
     };
 
-    this.handleSuccesfulFormSubmission = this.handleSuccesfulFormSubmission.bind(this);
+    this.handleNewFormSubmission = this.handleNewFormSubmission.bind(this);
+    this.handleEditFormSubmission = this.handleEditFormSubmission.bind(this);
     this.handleFormSubmissionError = this.handleFormSubmissionError.bind(this);
+    this.handleDeleteClick = this.handleDeleteClick.bind(this);
+    this.handleEditClick = this.handleEditClick.bind(this);
+    this.clearPortfolioToEdit = this.clearPortfolioToEdit.bind(this);
   }
 
-  handleSuccesfulFormSubmission(portfolioItem){
-    //TODO
-    // ACTUALIZAR EL ESTADO DE PORTFOLIO ITEM
-    // Y AÑADIR PORTFOLIOITEM A LA LISTA
+  clearPortfolioToEdit() {
+    this.setState({
+      portfolioToEdit: {}
+    });
   }
 
-  handleFormSubmissionError(error){
-    console.log("handleFormSubmissionError error", error)
+  handleEditClick(portfolioItem){
+    this.setState({
+      portfolioToEdit: portfolioItem
+    })
   }
 
-  getPortfolioItems(){
+
+  handleDeleteClick(portfolioItem){
+    axios.delete(
+      `https://api.devcamp.space/portfolio/portfolio_items/${portfolioItem.id}`,
+      { withCredentials: true}
+    ).then(response=>{
+      this.setState({
+        portfolioItems: this.state.portfolioItems.filter(item =>{
+          return item.id !== portfolioItem.id;
+        })
+      })
+      return response.data;
+    }).catch(error => {
+      console.log("handleDeleteClickError", error);
+    })
+
+  }
+
+  handleEditFormSubmission(){
+    this.getPortfolioItems();
+  }
+
+
+
+  handleNewFormSubmission(portfolioItem) {
+    this.setState({
+      portfolioItems: [portfolioItem].concat(this.state.portfolioItems)
+    });
+  }
+
+  handleFormSubmissionError(error) {
+    console.log("handleFormSubmissionError error", error);
+  }
+
+  getPortfolioItems() {
     axios
-      .get('https://anahuerta.devcamp.space/portfolio/portfolio_items',{
-        withCredentials:true
-      }).then(response => {
+      .get(
+        "https://anahuerta.devcamp.space/portfolio/portfolio_items?order_by=created_at&direction=desc",
+        {
+          withCredentials: true
+        }
+      )
+      .then(response => {
         this.setState({
           portfolioItems: [...response.data.portfolio_items]
         });
@@ -42,8 +85,8 @@ export default class PortfolioManager extends Component {
       });
   }
 
-  componentDidMount(){
-    this.getPortfolioItems()
+  componentDidMount() {
+    this.getPortfolioItems();
   }
 
   render() {
@@ -51,15 +94,21 @@ export default class PortfolioManager extends Component {
       <div className="portfolio-manager-wrapper">
         <div className="left-column">
           <PortfolioForm
-            handleSuccesfulFormSubmission = {this.handleSuccesfulFormSubmission}
-            handleFormSubmissionError = {this.handleFormSubmissionError}
+            handleNewFormSubmission={this.handleNewFormSubmission}
+            handleEditFormSubmission={this.handleEditFormSubmission}
+            handleFormSubmissionError={this.handleFormSubmissionError}
+            clearPortfolioToEdit = {this.clearPortfolioToEdit}
+            portfolioToEdit = {this.state.portfolioToEdit}
           />
         </div>
 
-        <div className="rigth-column">
-          <PortfolioSidebarList data={this.state.portfolioItems}/>
+        <div className="right-column">
+          <PortfolioSidebarList 
+            handleDeleteClick = {this.handleDeleteClick}
+            data={this.state.portfolioItems} 
+            handleEditClick = {this.handleEditClick}
+          />
         </div>
-
       </div>
     );
   }
