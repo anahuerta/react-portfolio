@@ -3,7 +3,7 @@ import axios from "axios";
 import { withRouter } from "react-router";
 import { NavLink } from "react-router-dom";
 
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NavigationComponent = props => {
   const dynamicLink = (route, linkText) => {
@@ -67,7 +67,7 @@ const NavigationComponent = props => {
         ANA HUERTA
         {props.loggedInStatus === "LOGGED_IN" ? (
           <a onClick={handleSignOut}>
-            <FontAwesomeIcon icon="sign-out-alt"/>
+            <FontAwesomeIcon icon="sign-out-alt" />
           </a>
         ) : null}
       </div>
@@ -83,7 +83,7 @@ export default withRouter(NavigationComponent);
 // import { NavLink } from "react-router-dom";
 
 
-// // Nj!GSqh6FvPpsB!
+
 
 
 // const NavigationComponent = props => {

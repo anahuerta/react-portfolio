@@ -112,7 +112,7 @@ export default class Login extends Component {
       errorText: ""
     });
   }
-  //Nj!GSqh6FvPpsB!
+
   handleSubmit(event) {
     axios
       .post("https://api.devcamp.space/sessions",
