@@ -12,7 +12,7 @@ export default class PortfolioForm extends Component {
     this.state = {
       name: "",
       description: "",
-      category: "eCommerce",
+      category: "E-Commerce",
       position: "",
       url: "",
       thumb_image: "",
@@ -73,7 +73,7 @@ export default class PortfolioForm extends Component {
         id: id,
         name: name || "",
         description: description || "",
-        category: category || "eCommerce",
+        category: category || "E-Commerce",
         position: position || "",
         url: url || "",
         editMode: true,
@@ -166,7 +166,7 @@ export default class PortfolioForm extends Component {
         this.setState({
           name: "",
           description: "",
-          category: "eCommerce",
+          category: "E-Commerce",
           position: "",
           url: "",
           thumb_image: "",
@@ -224,9 +224,9 @@ export default class PortfolioForm extends Component {
             onChange={this.handleChange}
             className="select-element"
           >
-            <option value="eCommerce">eCommerce</option>
-            <option value="Scheduling">Scheduling</option>
-            <option value="Enterprise">Enterprise</option>
+            <option value="E-Commerce">E-Commerce</option>
+            <option value="Software">Software</option>
+            <option value="Hardware">Hardware</option>
           </select>
         </div>
 
@@ -252,15 +252,15 @@ export default class PortfolioForm extends Component {
               </div>
             </div>
           ) : (
-            <DropzoneComponent
-              ref={this.thumbRef}
-              config={this.componentConfig()}
-              djsConfig={this.djsConfig()}
-              eventHandlers={this.handleThumbDrop()}
-            >
-              <div className="dz-message">Thumbnail</div>
-            </DropzoneComponent>
-          )}
+              <DropzoneComponent
+                ref={this.thumbRef}
+                config={this.componentConfig()}
+                djsConfig={this.djsConfig()}
+                eventHandlers={this.handleThumbDrop()}
+              >
+                <div className="dz-message">Thumbnail</div>
+              </DropzoneComponent>
+            )}
 
           {this.state.banner_image_url && this.state.editMode ? (
             <div className="portfolio-manager-image-wrapper">
@@ -273,15 +273,15 @@ export default class PortfolioForm extends Component {
               </div>
             </div>
           ) : (
-            <DropzoneComponent
-              ref={this.bannerRef}
-              config={this.componentConfig()}
-              djsConfig={this.djsConfig()}
-              eventHandlers={this.handleBannerDrop()}
-            >
-              <div className="dz-message">Banner</div>
-            </DropzoneComponent>
-          )}
+              <DropzoneComponent
+                ref={this.bannerRef}
+                config={this.componentConfig()}
+                djsConfig={this.djsConfig()}
+                eventHandlers={this.handleBannerDrop()}
+              >
+                <div className="dz-message">Banner</div>
+              </DropzoneComponent>
+            )}
 
           {this.state.logo_url && this.state.editMode ? (
             <div className="portfolio-manager-image-wrapper">
@@ -292,15 +292,15 @@ export default class PortfolioForm extends Component {
               </div>
             </div>
           ) : (
-            <DropzoneComponent
-              ref={this.logoRef}
-              config={this.componentConfig()}
-              djsConfig={this.djsConfig()}
-              eventHandlers={this.handleLogoDrop()}
-            >
-              <div className="dz-message">Logo</div>
-            </DropzoneComponent>
-          )}
+              <DropzoneComponent
+                ref={this.logoRef}
+                config={this.componentConfig()}
+                djsConfig={this.djsConfig()}
+                eventHandlers={this.handleLogoDrop()}
+              >
+                <div className="dz-message">Logo</div>
+              </DropzoneComponent>
+            )}
         </div>
 
         <div>

@@ -90,6 +90,7 @@
 
 import React, { Component } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default class Login extends Component {
   constructor(props) {
@@ -98,7 +99,7 @@ export default class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      errorText:""
+      errorText: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -108,45 +109,45 @@ export default class Login extends Component {
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value,
-      errorText:""
+      errorText: ""
     });
   }
-//Nj!GSqh6FvPpsB!
+  //Nj!GSqh6FvPpsB!
   handleSubmit(event) {
     axios
-        .post ("https://api.devcamp.space/sessions",
+      .post("https://api.devcamp.space/sessions",
         {
-            client:{
-                email: this.state.email,
-                password: this.state.password
-            }
+          client: {
+            email: this.state.email,
+            password: this.state.password
+          }
         },
-        {withCredentials:true}
-        )
-        
-        .then (response=>{
-            //console.log("response", response);
-            if(response.data.status === "created"){
-              this.props.handleSuccessfulAuth();
+        { withCredentials: true }
+      )
 
-            }else{
-              this.setState({
-                errorText:"Wrong email or password"
-              });
+      .then(response => {
+        //console.log("response", response);
+        if (response.data.status === "created") {
+          this.props.handleSuccessfulAuth();
 
-              this.props.handleUnsuccessfulAuth();
-            }
-        })
-        
-        .catch(error=>{
-          //console.log("Some error occurred", error);
+        } else {
           this.setState({
-            errorText:"An error occurred"
+            errorText: "Wrong email or password"
           });
+
           this.props.handleUnsuccessfulAuth();
+        }
+      })
+
+      .catch(error => {
+        //console.log("Some error occurred", error);
+        this.setState({
+          errorText: "An error occurred"
         });
-    
-        event.preventDefault();
+        this.props.handleUnsuccessfulAuth();
+      });
+
+    event.preventDefault();
   }
 
   render() {
@@ -156,25 +157,30 @@ export default class Login extends Component {
 
         <div>{this.state.errorText}</div>
 
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Your email"
-            value={this.state.email}
-            onChange={this.handleChange}
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Your password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
+        <form onSubmit={this.handleSubmit} className="auth-form-wrapper">
+          <div className="form-group">
+            <FontAwesomeIcon icon="envelope" />
+            <input
+              type="email"
+              name="email"
+              placeholder="Your email"
+              value={this.state.email}
+              onChange={this.handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <FontAwesomeIcon icon="lock" />
+            <input
+              type="password"
+              name="password"
+              placeholder="Your password"
+              value={this.state.password}
+              onChange={this.handleChange}
+            />
+          </div>
 
           <div>
-            <button type="submit">Login</button>
+            <button type="submit" className="btn">Login</button>
           </div>
         </form>
       </div>

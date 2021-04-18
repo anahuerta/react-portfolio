@@ -1,4 +1,6 @@
-import React, { Component } from "react";
+import React, {
+  Component
+} from "react";
 import axios from "axios";
 
 import PortfolioItem from "./portfolio-item";
@@ -17,20 +19,28 @@ export default class PortfolioContainer extends Component {
   }
 
   handleFilter(filter) {
-    this.setState({
-      data: this.state.data.filter(item => {
-        return item.category === filter;
-      })
-    });
+    if (filter === "CLEAR_FILTERS") {
+      this.getPortfolioItems();
+    } else {
+      this.getPortfolioItems(filter);
+    }
   }
 
-  getPortfolioItems() {
+  getPortfolioItems(filter) {
     axios
       .get("https://anahuerta.devcamp.space/portfolio/portfolio_items")
       .then(response => {
-        this.setState({
-          data: response.data.portfolio_items
-        });
+        if (filter) {
+          this.setState({
+            data: response.data.portfolio_items.filter(item => {
+              return item.category === filter;
+            })
+          });
+        } else {
+          this.setState({
+            data: response.data.portfolio_items
+          });
+        }
       })
       .catch(error => {
         console.log(error);
@@ -39,7 +49,13 @@ export default class PortfolioContainer extends Component {
 
   portfolioItems() {
     return this.state.data.map(item => {
-      return <PortfolioItem key={item.id} item={item} />;
+      return <PortfolioItem key={
+        item.id
+      }
+        item={
+          item
+        }
+      />;
     });
   }
 
@@ -49,96 +65,48 @@ export default class PortfolioContainer extends Component {
 
   render() {
     if (this.state.isLoading) {
-      return <div>Loading...</div>;
+      return <div > Loading... </div>;
     }
 
     return (
-      <div className="portfolio-items-wrapper">
-        <button className="btn" onClick={() => this.handleFilter("eCommerce")}>
-          eCommerce
-        </button>
-        <button className="btn" onClick={() => this.handleFilter("Scheduling")}>
-          Scheduling
-        </button>
-        <button className="btn" onClick={() => this.handleFilter("Enterprise")}>
-          Enterprise
-        </button>
+      <div className="homepage-wrapper">
+        <div className="filter-links">
+          <button className="btn"
+            onClick={
+              () => this.handleFilter("E-Commerce")
+            } >
+            E-Commerce
+          </button>
 
-        {this.portfolioItems()}
+          <button className="btn"
+            onClick={
+              () => this.handleFilter("Software")
+            } >
+            Software
+            </button>
+
+          <button className="btn"
+            onClick={
+              () => this.handleFilter("Hardware")
+            } >
+            Hardware
+          </button>
+
+          <button className="btn"
+            onClick={
+              () => this.handleFilter("CLEAR_FILTERS")
+            } >
+            All
+          </button>
+
+        </div>
+
+        <div className="portfolio-items-wrapper" >
+          {
+            this.portfolioItems()
+          }
+        </div>
       </div>
     );
   }
 }
-
-
-// import React, {Component} from "react";
-// import axios from "axios";
-// import PortfolioItem from "./portfolio-item";
-
-// export default class PortfolioContainer extends Component {
-//     constructor(){
-//         super();
-
-//         this.state = {
-//             pageTitle: "Welcome to my portfolio",
-//             isLoading: false,
-//             data : []
-//         };
-
-//         this.handleTitle = this.handleTitle.bind(this);
-
-//     }
-
-//     handleTitle(filter){
-//         this.setState({
-//             data: this.state.data.filter(item =>{
-//                 return item.category === filter;
-//             })
-//         });
-//     }
-
-//     getPortfolioItems(){
-//         axios
-//           .get('https://anahuerta.devcamp.space/portfolio/portfolio_items')
-//           .then (response =>  {
-//             //console.log("response data",response);
-//             this.setState({
-//               data: response.data.portfolio_items
-//             })
-//           })
-//           .catch (error=> {
-//            console.log(error);
-//           })
-//       }
-
-//     portfolioItems(){
-//         return this.state.data.map(item =>{
-//             // console.log("item data", item); Forma de ver el tipo de datos que tenemos en la API
-//             // DEPURADOR/ DEBUGGER
-//             //debugger;
-//             return (<PortfolioItem key= {item.id} item={item}/>);
-//         });
-//     }
-
-//     componentDidMount(){
-//         this.getPortfolioItems();
-//     }
-
-//     render(){
-//         if(this.state.isLoading){
-//             return <div>Loading...</div>
-//         }
-
-//         return(
-//             <div className="portfolio-items-wrapper">
-
-//                 <button className="btn" onClick= {()=> this.handleTitle("Software")}>Software</button>
-//                 <button className="btn" onClick= {()=> this.handleTitle("Hardware")}>Hardware</button>
-//                 <button className="btn" onClick= {()=> this.handleTitle("E-Commerce")}>E-Commerce</button>
-
-//                 {this.portfolioItems()}
-//             </div>
-                
-//         );
-//     }
-// }
